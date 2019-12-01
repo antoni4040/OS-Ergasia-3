@@ -1,0 +1,6 @@
+/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles/comptroller.dir
+/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles/station-manager.dir
+/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles/mystation.dir
+/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles/bus.dir

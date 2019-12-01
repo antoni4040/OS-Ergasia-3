@@ -1,0 +1,20 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../include/bus.h
+stdio.h
+-
+string.h
+-
+stdlib.h
+-
+
+/home/antoni4040/CLionProjects/OS-Project-3/src/bus.c
+bus.h
+/home/antoni4040/CLionProjects/OS-Project-3/src/bus.h
+

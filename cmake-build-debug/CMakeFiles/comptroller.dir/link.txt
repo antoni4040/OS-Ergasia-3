@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/comptroller.dir/src/comptroller.c.o  -o comptroller 

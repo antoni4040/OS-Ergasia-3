@@ -1,0 +1,1 @@
+/usr/bin/cc -g   CMakeFiles/OS_Project_3.dir/src/mystation.c.o CMakeFiles/OS_Project_3.dir/src/bus.c.o  -o OS_Project_3 
