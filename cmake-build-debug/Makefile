@@ -216,6 +216,33 @@ src/comptroller.c.s:
 	$(MAKE) -f CMakeFiles/comptroller.dir/build.make CMakeFiles/comptroller.dir/src/comptroller.c.s
 .PHONY : src/comptroller.c.s
 
+src/files.o: src/files.c.o
+
+.PHONY : src/files.o
+
+# target to build an object file
+src/files.c.o:
+	$(MAKE) -f CMakeFiles/mystation.dir/build.make CMakeFiles/mystation.dir/src/files.c.o
+.PHONY : src/files.c.o
+
+src/files.i: src/files.c.i
+
+.PHONY : src/files.i
+
+# target to preprocess a source file
+src/files.c.i:
+	$(MAKE) -f CMakeFiles/mystation.dir/build.make CMakeFiles/mystation.dir/src/files.c.i
+.PHONY : src/files.c.i
+
+src/files.s: src/files.c.s
+
+.PHONY : src/files.s
+
+# target to generate assembly for a file
+src/files.c.s:
+	$(MAKE) -f CMakeFiles/mystation.dir/build.make CMakeFiles/mystation.dir/src/files.c.s
+.PHONY : src/files.c.s
+
 src/mystation.o: src/mystation.c.o
 
 .PHONY : src/mystation.o
@@ -288,6 +315,9 @@ help:
 	@echo "... src/comptroller.o"
 	@echo "... src/comptroller.i"
 	@echo "... src/comptroller.s"
+	@echo "... src/files.o"
+	@echo "... src/files.i"
+	@echo "... src/files.s"
 	@echo "... src/mystation.o"
 	@echo "... src/mystation.i"
 	@echo "... src/mystation.s"

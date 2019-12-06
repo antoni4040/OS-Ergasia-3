@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/mystation.dir/src/mystation.c.o  -o mystation 
+/usr/bin/cc -g   CMakeFiles/mystation.dir/src/mystation.c.o CMakeFiles/mystation.dir/src/files.c.o  -o mystation 

@@ -6,11 +6,43 @@
 
 #IncludeRegexTransform: 
 
-/home/antoni4040/CLionProjects/OS-Project-3/src/mystation.c
+../include/files.h
+stdio.h
+-
+stdbool.h
+-
+sys/stat.h
+-
+mystation.h
+../include/mystation.h
+
+../include/mystation.h
 stdio.h
 -
 string.h
 -
 stdlib.h
 -
+unistd.h
+-
+semaphore.h
+-
+sys/types.h
+-
+sys/ipc.h
+-
+sys/shm.h
+-
+sys/wait.h
+-
+files.h
+../include/files.h
+
+/home/antoni4040/CLionProjects/OS-Project-3/src/files.c
+files.h
+/home/antoni4040/CLionProjects/OS-Project-3/src/files.h
+
+/home/antoni4040/CLionProjects/OS-Project-3/src/mystation.c
+mystation.h
+/home/antoni4040/CLionProjects/OS-Project-3/src/mystation.h
 

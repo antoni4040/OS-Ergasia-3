@@ -50,6 +50,10 @@ int main(int argc, char** argv) {
             i++;
             shmid = (int)strtol(argv[i], NULL, 10);
         }
+        else {
+            fprintf(stderr, "Unrecognised type of argument %s.\n", argv[i]);
+            return 1;
+        }
     }
 
     printf("%d %d %d %f %f %d\n", destination, passengerCount, maxToBoard, parkPeriod, manTime, shmid);

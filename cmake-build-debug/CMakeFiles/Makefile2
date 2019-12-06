@@ -107,7 +107,7 @@ CMakeFiles/comptroller.dir/clean:
 CMakeFiles/station-manager.dir/all:
 	$(MAKE) -f CMakeFiles/station-manager.dir/build.make CMakeFiles/station-manager.dir/depend
 	$(MAKE) -f CMakeFiles/station-manager.dir/build.make CMakeFiles/station-manager.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles --progress-num=7,8 "Built target station-manager"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles --progress-num=8,9 "Built target station-manager"
 .PHONY : CMakeFiles/station-manager.dir/all
 
 # Build rule for subdir invocation for target.
@@ -134,12 +134,12 @@ CMakeFiles/station-manager.dir/clean:
 CMakeFiles/mystation.dir/all:
 	$(MAKE) -f CMakeFiles/mystation.dir/build.make CMakeFiles/mystation.dir/depend
 	$(MAKE) -f CMakeFiles/mystation.dir/build.make CMakeFiles/mystation.dir/build
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles --progress-num=5,6 "Built target mystation"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --progress-dir=/home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles --progress-num=5,6,7 "Built target mystation"
 .PHONY : CMakeFiles/mystation.dir/all
 
 # Build rule for subdir invocation for target.
 CMakeFiles/mystation.dir/rule: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles 2
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles 3
 	$(MAKE) -f CMakeFiles/Makefile2 CMakeFiles/mystation.dir/all
 	$(CMAKE_COMMAND) -E cmake_progress_start /home/antoni4040/CLionProjects/OS-Project-3/cmake-build-debug/CMakeFiles 0
 .PHONY : CMakeFiles/mystation.dir/rule

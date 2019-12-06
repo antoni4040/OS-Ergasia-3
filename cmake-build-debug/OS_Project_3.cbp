@@ -212,6 +212,12 @@
 		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/include/comptroller.h">
 			<Option target="comptroller"/>
 		</Unit>
+		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/include/files.h">
+			<Option target="mystation"/>
+		</Unit>
+		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/include/mystation.h">
+			<Option target="mystation"/>
+		</Unit>
 		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/include/station-manager.h">
 			<Option target="station-manager"/>
 		</Unit>
@@ -220,6 +226,9 @@
 		</Unit>
 		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/src/comptroller.c">
 			<Option target="comptroller"/>
+		</Unit>
+		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/src/files.c">
+			<Option target="mystation"/>
 		</Unit>
 		<Unit filename="/home/antoni4040/CLionProjects/OS-Project-3/src/mystation.c">
 			<Option target="mystation"/>
