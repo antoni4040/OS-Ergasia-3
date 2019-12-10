@@ -1,1 +1,1 @@
-/usr/bin/cc -g   CMakeFiles/station-manager.dir/src/station-manager.c.o  -o station-manager 
+/usr/bin/cc -g   CMakeFiles/station-manager.dir/src/station-manager.c.o  -o station-manager -lpthread 

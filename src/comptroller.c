@@ -39,7 +39,6 @@ int main(int argc, char** argv) {
 
     // Get station at beginning of segment.
     station* Station = (station*) segmentStart;
-    printf("Test: station ASK size %d\n", Station->ASKsize);
 
     // Remove shared memory segment.
     int err = shmctl(segmentID, IPC_RMID, 0);

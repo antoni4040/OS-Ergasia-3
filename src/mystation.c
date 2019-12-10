@@ -31,6 +31,14 @@ int main(int argc, char** argv) {
     if(readConfigFile(Station, configFile) != 0)
         return 1;
 
+    // Initialize semaphores.
+    sem_init(&(Station->mutex), 1, 1);
+    sem_init(&(Station->request), 1, 0);
+    sem_init(&(Station->awaitAnswer), 1, 0);
+    sem_init(&(Station->waitForIn), 1, 1);
+    sem_init(&(Station->waitForOut), 1, 1);
+    Station->goToSpot = -1;
+
     // Compute proper size for shared memory segment.
     size_t segmentSize = sizeof(station) + (
             Station->ASKsize + Station->PELsize + Station->VORsize
@@ -49,6 +57,9 @@ int main(int argc, char** argv) {
     // Create station at beginning of segment.
     StationSeg = (station*) segmentStart;
     memcpy(StationSeg, Station, sizeof(station));
+
+    // Initialize empty bays.
+    initializeBays(segmentStart);
 
     // Create comptroller and quit if it fails.
     int errC = createComptroller(segmentID);
@@ -101,10 +112,38 @@ int createStationManager(int segmentID) {
     if(pid == 0) {
         execlp("./station-manager", "./station-manager", "-s", segmentIDtoStr, (char*)NULL);
     }
-        // Error during fork.
+    // Error during fork.
     else if(pid < 0) {
         fprintf(stderr, "Error forking for station manager.\n");
         return -1;
     }
     return 0;
+}
+
+// Instead of getting the buses from a file, we'll create them randomly.
+int createRandomBus(int segmentID) {
+    
+}
+
+// Initialize empty parking spots in ASK, PEL and VOR bays.
+void initializeBays(void* segmentStart) {
+    station* Station = (station*)segmentStart;
+
+    // Initialize ASK bay.
+    bus* ASKBay = (bus*)(segmentStart + sizeof(station));
+    for(int i = 0; i < Station->ASKsize; i++) {
+        ASKBay[i].busID = 0;
+    }
+
+    // Initialize PEL bay.
+    bus* PELBay = (bus*)(segmentStart + sizeof(station) + sizeof(bus) * Station->ASKsize);
+    for(int i = 0; i < Station->PELsize; i++) {
+        PELBay[i].busID = 0;
+    }
+
+    // Initialize VOR bay.
+    bus* VORBay = (bus*)(segmentStart + sizeof(station) + sizeof(bus) * (Station->ASKsize + Station->PELsize));
+    for(int i = 0; i < Station->VORsize; i++) {
+        VORBay[i].busID = 0;
+    }
 }

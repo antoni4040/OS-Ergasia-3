@@ -3,4 +3,6 @@
 
 CMakeFiles/bus.dir/src/bus.c.o
  ../include/bus.h
+ ../include/files.h
+ ../include/mystation.h
  /home/antoni4040/CLionProjects/OS-Project-3/src/bus.c

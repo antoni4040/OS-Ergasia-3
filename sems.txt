@@ -1,0 +1,37 @@
+sem request = 0
+sem awaitAnswer = 0
+sem mutex = 1
+counter in = 0
+counter out = 0
+message dest = null
+message allow = false
+
+BUS
+while(notAllowed):
+    P(mutex)
+    in += 1
+    dest = BUS.dest
+    V(request) //Make request basically
+    P(awaitAnswer)
+    if(allow):
+        go to spot
+        V(mutex)
+        nowAllowed = False
+    else:
+        V(mutex)
+sleep(time)
+P(mutex)
+moving--
+V(mutex)
+
+
+SM
+while(True):
+    P(request) //If no request, do nothing
+    check dest can be served
+    if allowed:
+        allow = True
+        go to spot no. X
+    else:
+        allow = False
+    V(awaitAnswer)
