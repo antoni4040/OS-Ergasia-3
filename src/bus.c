@@ -59,7 +59,8 @@ int main(int argc, char** argv) {
         }
     }
 
-    printf("%d %d %d %f %f %d\n", destination, passengerCount, maxToBoard, parkPeriod, manTime, segmentID);
+    printf("BUS %d: dest:%d  passengers:%d maxToBoard:%d Park:%d Man:%d \n",
+            getpid(), destination, passengerCount, maxToBoard, parkPeriod, manTime);
 
     // Attach shared memory segment.
     segmentStart = (void*) shmat(segmentID, NULL, 0);
@@ -75,6 +76,13 @@ int main(int argc, char** argv) {
     // Ask to go in.
     int notAllowed = 1;
     while(notAllowed == 1) {
+        if(destination == ASK)
+            sem_wait(&Station->ASKcome);
+        if(destination == PEL)
+            sem_wait(&Station->PELcome);
+        if(destination == VOR)
+            sem_wait(&Station->VORcome);
+
         sem_wait(&Station->waitForIn);
         sem_wait(&Station->mutex);
         Station->requestType = IN;
@@ -89,11 +97,13 @@ int main(int argc, char** argv) {
         else {
             sem_post(&Station->mutex);
             sem_post(&Station->waitForIn);
-            sleep(WAIT_IF_FULL);    //No point in disturbing the manager if station is full, wait some time.
+            printf("Station full, spending time here.\n");
+            sleep(WAIT_IF_FULL);
         }
     }
 
     // Maneuver in the station and reach parking spot.
+    printf("Bus %d moving in station.\n", getpid());
     sleep(manTime);
     if(Station->goToBay == ASK) {
         parkingBay = ASK;
@@ -117,6 +127,8 @@ int main(int argc, char** argv) {
     sem_post(&Station->waitForIn);
 
     // Passengers go, passengers come, randomly for the needs of this exercise.
+    printf("Bus %d parked.\n", getpid());
+    sleep(parkPeriod);
 
     // Ask to leave station.
     notAllowed = 1;
@@ -128,6 +140,7 @@ int main(int argc, char** argv) {
         sem_wait(&Station->awaitAnswer);
         if(Station->allowRequest == ALLOW) {
             //Leave.
+            Station->busesLeft += 1;
             sem_post(&Station->mutex);
             notAllowed = 0;
         }
@@ -139,18 +152,30 @@ int main(int argc, char** argv) {
     }
 
     // Maneuver out of station.
-    sleep(manTime);
+    printf("Bus %d leaving station.\n", getpid());
     if(parkingBay == ASK) {
+        Station->ASKavailable += 1;
         ASKBay[parkingSpot].busID = 0;
     }
     else if(parkingBay == PEL) {
+        Station->PELavailable += 1;
         PELBay[parkingSpot].busID = 0;
     }
     else {
+        Station->VORavailable += 1;
         VORBay[parkingSpot].busID = 0;
     }
+    sleep(manTime);
     Station->movingOut = 0;
     sem_post(&Station->waitForOut);
+
+    printf("Bus %d left station.\n", getpid());
+
+    //Last bus tells the station manager to fuck off.
+    if(Station->busesLeft == NUM_OF_BUSES) {
+        Station->requestType = OVER;
+        sem_post(&Station->request);
+    }
 
     // Remove shared memory segment.
     int err = shmctl(segmentID, IPC_RMID, 0);

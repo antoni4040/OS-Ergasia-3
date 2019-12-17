@@ -29,10 +29,20 @@ int main(int argc, char** argv) {
     bus* PELBay = (bus*)(segmentStart + sizeof(station) + sizeof(bus) * Station->ASKsize);
     bus* VORBay = (bus*)(segmentStart + sizeof(station) + sizeof(bus) * (Station->ASKsize + Station->PELsize));
 
-    //TODO: when do we stop?
-    for(int i = 0; i < 10; i++) {
+
+    // Keep getting requests until last bus tells us to stop.
+    while(1) {
+        if(Station->ASKavailable > 0 || Station->PELavailable > 0)
+            sem_post(&Station->ASKcome);
+        if(Station->PELavailable > 0)
+            sem_post(&Station->PELcome);
+        if(Station->VORavailable > 0 || Station->PELavailable > 0)
+            sem_post(&Station->VORcome);
+
         sem_wait(&Station->request);
-        if(Station->requestType == IN) {
+        if(Station->requestType == OVER)
+            break;
+        else if(Station->requestType == IN) {
             enum region bayToGo;
             int spotToGo;
             if(entrancePossible(Station, ASKBay, PELBay, VORBay, &bayToGo, &spotToGo) == 0) {
@@ -40,6 +50,12 @@ int main(int argc, char** argv) {
                 Station->goToSpot = spotToGo;
                 Station->goToBay = bayToGo;
                 Station->movingIn = 1;
+                if(bayToGo == ASK)
+                    Station->ASKavailable -= 1;
+                if(bayToGo == PEL)
+                    Station->PELavailable -= 1;
+                if(bayToGo == VOR)
+                    Station->VORavailable -= 1;
             }
             else {
                 Station->allowRequest = DECLINE;
@@ -56,6 +72,8 @@ int main(int argc, char** argv) {
         }
         sem_post(&Station->awaitAnswer);
     }
+
+    printf("Ran out of buses, time for station manager to go home.\n");
 
     // Remove shared memory segment.
     int err = shmctl(segmentID, IPC_RMID, 0);
@@ -80,6 +98,14 @@ int entrancePossible(station* Station, bus* ASKBay, bus* PELBay, bus* VORBay, en
                 return 0;
             }
         }
+        for(int i = 0; i < Station->PELsize; i++) {
+            if(PELBay[i].busID == 0) {
+                *bay = PEL;
+                *spot = i;
+                return 0;
+            }
+        }
+        return 1;
     }
     else if(Station->requestRegion == PEL) {
         for(int i = 0; i < Station->PELsize; i++) {
@@ -89,6 +115,7 @@ int entrancePossible(station* Station, bus* ASKBay, bus* PELBay, bus* VORBay, en
                 return 0;
             }
         }
+        return 1;
     }
     else if(Station->requestRegion == VOR) {
         for(int i = 0; i < Station->VORsize; i++) {
@@ -98,6 +125,14 @@ int entrancePossible(station* Station, bus* ASKBay, bus* PELBay, bus* VORBay, en
                 return 0;
             }
         }
+        for(int i = 0; i < Station->PELsize; i++) {
+            if(PELBay[i].busID == 0) {
+                *bay = PEL;
+                *spot = i;
+                return 0;
+            }
+        }
+        return 1;
     }
     else {
         fprintf(stderr, "Unrecognised destination region during lookup.\n");

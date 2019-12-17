@@ -37,7 +37,11 @@ int main(int argc, char** argv) {
     sem_init(&(Station->awaitAnswer), 1, 0);
     sem_init(&(Station->waitForIn), 1, 1);
     sem_init(&(Station->waitForOut), 1, 1);
+    sem_init(&(Station->ASKcome), 1, 0);
+    sem_init(&(Station->PELcome), 1, 0);
+    sem_init(&(Station->VORcome), 1, 0);
     Station->goToSpot = -1;
+    Station->busesLeft = 0;
 
     // Compute proper size for shared memory segment.
     size_t segmentSize = sizeof(station) + (
@@ -70,6 +74,13 @@ int main(int argc, char** argv) {
     int errS = createStationManager(segmentID);
     if(errS == -1)
         return 1;
+
+    srand(time(0));
+    for(int i = 0; i < NUM_OF_BUSES; i++) {
+        int errB = createRandomBus(segmentID);
+        if(errB == -1)
+            return 1;
+    }
 
     int pid, status;
     while((pid=wait(&status)) > 0);
@@ -122,7 +133,46 @@ int createStationManager(int segmentID) {
 
 // Instead of getting the buses from a file, we'll create them randomly.
 int createRandomBus(int segmentID) {
-    
+    enum region randomType = (enum region)(rand() % 3);
+    int randomPassengers = rand() % 50 + 50;
+    int randomCapacity = (rand() % 5) * 10 + 100;
+    int randomParkPeriod = rand() % 2 + 8;
+    int randomManeuverPeriod = rand() % 2;
+
+    char randomTypeToStr[5];
+    char randomPassengersToStr[20];
+    char randomCapacityToStr[20];
+    char randomParkPeriodToStr[20];
+    char randomManeuverPeriodToStr[20];
+    char segmentIDtoStr[20];
+
+    if(randomType == ASK)
+        strcpy(randomTypeToStr, "ASK");
+    else if(randomType == PEL)
+        strcpy(randomTypeToStr, "PEL");
+    else
+        strcpy(randomTypeToStr, "VOR");
+
+    sprintf(randomPassengersToStr, "%d", randomPassengers);
+    sprintf(randomCapacityToStr, "%d", randomCapacity);
+    sprintf(randomParkPeriodToStr, "%d", randomParkPeriod);
+    sprintf(randomManeuverPeriodToStr, "%d", randomManeuverPeriod);
+    sprintf(segmentIDtoStr, "%d", segmentID);
+
+    int pid = fork();
+
+    // New child process, create new bus.
+    if(pid == 0) {
+        execlp("./bus", "./bus", "-t", randomTypeToStr, "-n", randomParkPeriodToStr, "-c",
+                randomCapacityToStr, "-p", randomParkPeriodToStr, "-m", randomManeuverPeriodToStr,
+                "-s", segmentIDtoStr, (char*)NULL);
+    }
+        // Error during fork.
+    else if(pid < 0) {
+        fprintf(stderr, "Error forking for bus.\n");
+        return -1;
+    }
+    return 0;
 }
 
 // Initialize empty parking spots in ASK, PEL and VOR bays.

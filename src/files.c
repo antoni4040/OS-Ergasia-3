@@ -27,12 +27,15 @@ int readConfigFile(station* Station, char* configFile) {
         bayCapacity = strtok(NULL, " ");
         if(strcmp(bayCode, "ASK") == 0) {       // Initialize ASK bay area.
             Station->ASKsize = (int)strtoul(bayCapacity, NULL, 10);
+            Station->ASKavailable = Station->ASKsize;
         }
         else if(strcmp(bayCode, "PEL") == 0) {      // Initialize PEL bay area.
             Station->PELsize = (int)strtoul(bayCapacity, NULL, 10);
+            Station->PELavailable = Station->PELsize;
         }
         else if(strcmp(bayCode, "VOR") == 0) {      // Initialize VOR bay area.
             Station->VORsize = (int)strtoul(bayCapacity, NULL, 10);
+            Station->VORavailable = Station->VORsize;
         }
         else {
             fprintf(stderr, "Unrecognised region code.\n");

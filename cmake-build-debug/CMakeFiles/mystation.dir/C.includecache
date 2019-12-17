@@ -25,6 +25,8 @@ stdlib.h
 -
 unistd.h
 -
+time.h
+-
 semaphore.h
 -
 sys/types.h
