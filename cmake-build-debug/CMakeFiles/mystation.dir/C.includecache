@@ -40,10 +40,6 @@ sys/wait.h
 files.h
 ../include/files.h
 
-/home/antoni4040/CLionProjects/OS-Project-3/src/files.c
-files.h
-/home/antoni4040/CLionProjects/OS-Project-3/src/files.h
-
 /home/antoni4040/CLionProjects/OS-Project-3/src/mystation.c
 mystation.h
 /home/antoni4040/CLionProjects/OS-Project-3/src/mystation.h

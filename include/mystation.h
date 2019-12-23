@@ -14,7 +14,6 @@
 
 #include "files.h"
 
-#define REPORT_TIME "1.0"
 #define STATS_TIME "10.0"
 
 #define IN 0
@@ -25,7 +24,17 @@
 #define DECLINE 1
 #define WAIT_IF_FULL 1
 
-#define NUM_OF_BUSES 30
+#define NUM_OF_BUSES 20     //Buses to create for this simulation.
+#define NUM_OF_TTY_BUSES 0  //Buses that we want to start manually from a terminal.
+
+#define MIN_PARKING_TIME 10
+#define RANDOM_PARKING_TIME 5
+#define MIN_MAN_TIME 4
+#define RANDOM_MAN_TIME 2
+#define MIN_PASSENGERS_COME 20
+#define RANDOM_PASSENGERS_COME 40
+#define MIN_CAPACITY 80
+#define RANDOM_CAPACITY 20
 
 enum region {ASK, PEL, VOR};
 
@@ -63,6 +72,12 @@ typedef struct station_{
     sem_t VORcome;              //There's room for VOR buses, let them come.
 
     int busesLeft;              //Count the buses that have left, to stop the simulation at some point.
+
+    // Statistics here:
+    int busesArrived;
+    int totalStayAtStation;
+    int passengersCome;
+    int passengersLeft;
 } station;
 
 int     createComptroller(int segmentID);

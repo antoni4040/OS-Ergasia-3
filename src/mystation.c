@@ -42,6 +42,10 @@ int main(int argc, char** argv) {
     sem_init(&(Station->VORcome), 1, 0);
     Station->goToSpot = -1;
     Station->busesLeft = 0;
+    Station->busesArrived = 0;
+    Station->totalStayAtStation = 0;
+    Station->passengersCome = 0;
+    Station->passengersLeft = 0;
 
     // Compute proper size for shared memory segment.
     size_t segmentSize = sizeof(station) + (
@@ -102,7 +106,7 @@ int createComptroller(int segmentID) {
 
     // New child process, create comptroller.
     if(pid == 0) {
-        execlp("./comptroller", "./comptroller", "-d", ""REPORT_TIME,
+        execlp("./comptroller", "./comptroller",
                 "-t", ""STATS_TIME, "-s", segmentIDtoStr, (char*)NULL);
     }
     // Error during fork.
@@ -134,10 +138,10 @@ int createStationManager(int segmentID) {
 // Instead of getting the buses from a file, we'll create them randomly.
 int createRandomBus(int segmentID) {
     enum region randomType = (enum region)(rand() % 3);
-    int randomPassengers = rand() % 50 + 50;
-    int randomCapacity = (rand() % 5) * 10 + 100;
-    int randomParkPeriod = rand() % 2 + 8;
-    int randomManeuverPeriod = rand() % 2;
+    int randomPassengers = rand() % RANDOM_PASSENGERS_COME + MIN_PASSENGERS_COME;
+    int randomCapacity = rand() % RANDOM_CAPACITY + MIN_CAPACITY;
+    int randomParkPeriod = rand() % RANDOM_PARKING_TIME + MIN_PARKING_TIME;
+    int randomManeuverPeriod = rand() % RANDOM_MAN_TIME + MIN_MAN_TIME;
 
     char randomTypeToStr[5];
     char randomPassengersToStr[20];

@@ -76,6 +76,7 @@ int main(int argc, char** argv) {
     // Ask to go in.
     int notAllowed = 1;
     while(notAllowed == 1) {
+        // Wait for station manager to signal available spots.
         if(destination == ASK)
             sem_wait(&Station->ASKcome);
         if(destination == PEL)
@@ -83,10 +84,13 @@ int main(int argc, char** argv) {
         if(destination == VOR)
             sem_wait(&Station->VORcome);
 
+        // Only one bus entering.
         sem_wait(&Station->waitForIn);
+        // Mutex for talking to manager.
         sem_wait(&Station->mutex);
         Station->requestType = IN;
         Station->requestRegion = destination;
+        // Wakeup manager and await his answer.
         sem_post(&Station->request);
         sem_wait(&Station->awaitAnswer);
         if(Station->allowRequest == ALLOW) {
@@ -98,7 +102,7 @@ int main(int argc, char** argv) {
             sem_post(&Station->mutex);
             sem_post(&Station->waitForIn);
             printf("Station full, spending time here.\n");
-            sleep(WAIT_IF_FULL);
+//            sleep(WAIT_IF_FULL);
         }
     }
 
@@ -123,6 +127,10 @@ int main(int argc, char** argv) {
         VORBay[Station->goToSpot].busID = getpid();
         VORBay[Station->goToSpot].destination = destination;
     }
+    srand(time(0));
+    Station->busesArrived += 1;
+    int passengersComingDown =  rand() % passengerCount + MIN_PASSENGERS_COME;
+    Station->passengersCome += passengersComingDown;
     Station->movingIn = 0;
     sem_post(&Station->waitForIn);
 
@@ -140,14 +148,17 @@ int main(int argc, char** argv) {
         sem_wait(&Station->awaitAnswer);
         if(Station->allowRequest == ALLOW) {
             //Leave.
+            int passengersLeaving = rand() % (maxToBoard - passengersComingDown);
+            Station->passengersLeft += passengersLeaving;
             Station->busesLeft += 1;
+            Station->totalStayAtStation += (int)parkPeriod;
             sem_post(&Station->mutex);
             notAllowed = 0;
         }
+        // Never gonna reach this part, but just for good measure.
         else {
             sem_post(&Station->mutex);
             sem_post(&Station->waitForOut);
-            sleep(WAIT_IF_FULL);    //No point in disturbing the manager.
         }
     }
 
@@ -172,7 +183,7 @@ int main(int argc, char** argv) {
     printf("Bus %d left station.\n", getpid());
 
     //Last bus tells the station manager to fuck off.
-    if(Station->busesLeft == NUM_OF_BUSES) {
+    if(Station->busesLeft == NUM_OF_BUSES + NUM_OF_TTY_BUSES) {
         Station->requestType = OVER;
         sem_post(&Station->request);
     }

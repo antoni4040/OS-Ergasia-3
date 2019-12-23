@@ -11,4 +11,6 @@
 
 #include "mystation.h"
 
+#define CYCLES_UNTIL_STATS 3
+
 #endif //OS_PROJECT_3_COMPTROLLER_H

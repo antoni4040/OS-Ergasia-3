@@ -32,6 +32,7 @@ int main(int argc, char** argv) {
 
     // Keep getting requests until last bus tells us to stop.
     while(1) {
+        // Call those that can come in.
         if(Station->ASKavailable > 0 || Station->PELavailable > 0)
             sem_post(&Station->ASKcome);
         if(Station->PELavailable > 0)
@@ -39,6 +40,7 @@ int main(int argc, char** argv) {
         if(Station->VORavailable > 0 || Station->PELavailable > 0)
             sem_post(&Station->VORcome);
 
+        // Wait for their request.
         sem_wait(&Station->request);
         if(Station->requestType == OVER)
             break;
