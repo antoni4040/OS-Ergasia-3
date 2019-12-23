@@ -1,0 +1,91 @@
+Output File:
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25342: dest:1  passengers:10 maxToBoard:87 Park:10 Man:5 
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25337: dest:2  passengers:10 maxToBoard:82 Park:10 Man:5 
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25336: dest:2  passengers:11 maxToBoard:84 Park:11 Man:5 
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25343: dest:2  passengers:14 maxToBoard:98 Park:14 Man:5 
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25338: dest:0  passengers:13 maxToBoard:92 Park:13 Man:5 
+Time: Mon Dec 23 21:06:59 2019
+ BUS: 25338 moving in station.
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25339: dest:0  passengers:14 maxToBoard:98 Park:14 Man:4 
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25340: dest:2  passengers:12 maxToBoard:88 Park:12 Man:5 
+Time: Mon Dec 23 21:06:59 2019
+ BUS 25341: dest:1  passengers:10 maxToBoard:95 Park:10 Man:5 
+Time: Mon Dec 23 21:07:04 2019
+ BUS: 25338 parked. 22 passengers coming down.
+Time: Mon Dec 23 21:07:04 2019
+ BUS: 25342 moving in station.
+Time: Mon Dec 23 21:07:09 2019
+ BUS: 25342 parked. 27 passengers coming down.
+Time: Mon Dec 23 21:07:09 2019
+ BUS: 25337 moving in station.
+Time: Mon Dec 23 21:07:14 2019
+ BUS: 25337 parked. 20 passengers coming down.
+Time: Mon Dec 23 21:07:14 2019
+ BUS: 25336 moving in station.
+Time: Mon Dec 23 21:07:17 2019
+ BUS: 25338 leaving station. 51 passengers boarded.
+Time: Mon Dec 23 21:07:19 2019
+ BUS: 25336 parked. 22 passengers coming down.
+Time: Mon Dec 23 21:07:19 2019
+ BUS: 25339 moving in station.
+Time: Mon Dec 23 21:07:22 2019
+ BUS: 25338 left the station.
+Time: Mon Dec 23 21:07:22 2019
+ BUS: 25342 leaving station. 48 passengers boarded.
+Time: Mon Dec 23 21:07:23 2019
+ BUS: 25339 parked. 27 passengers coming down.
+Time: Mon Dec 23 21:07:23 2019
+ BUS: 25341 moving in station.
+Time: Mon Dec 23 21:07:27 2019
+ BUS: 25342 left the station.
+Time: Mon Dec 23 21:07:27 2019
+ BUS: 25337 leaving station. 32 passengers boarded.
+Time: Mon Dec 23 21:07:28 2019
+ BUS: 25341 parked. 26 passengers coming down.
+Time: Mon Dec 23 21:07:28 2019
+ BUS: 25343 moving in station.
+Time: Mon Dec 23 21:07:32 2019
+ BUS: 25337 left the station.
+Time: Mon Dec 23 21:07:32 2019
+ BUS: 25336 leaving station. 31 passengers boarded.
+Time: Mon Dec 23 21:07:33 2019
+ BUS: 25343 parked. 23 passengers coming down.
+Time: Mon Dec 23 21:07:33 2019
+ BUS: 25340 moving in station.
+Time: Mon Dec 23 21:07:37 2019
+ BUS: 25336 left the station.
+Time: Mon Dec 23 21:07:37 2019
+ BUS: 25339 leaving station. 54 passengers boarded.
+Time: Mon Dec 23 21:07:38 2019
+ BUS: 25340 parked. 23 passengers coming down.
+Time: Mon Dec 23 21:07:41 2019
+ BUS: 25339 left the station.
+Time: Mon Dec 23 21:07:41 2019
+ BUS: 25341 leaving station. 39 passengers boarded.
+Time: Mon Dec 23 21:07:46 2019
+ BUS: 25341 left the station.
+Time: Mon Dec 23 21:07:47 2019
+ BUS: 25343 leaving station. 23 passengers boarded.
+Time: Mon Dec 23 21:07:52 2019
+ BUS: 25343 left the station.
+Time: Mon Dec 23 21:07:52 2019
+ BUS: 25340 leaving station. 49 passengers boarded.
+Time: Mon Dec 23 21:07:57 2019
+ BUS: 25340 left the station.
+Time: Mon Dec 23 21:09:52 2019
+ BUS 25430: dest:2  passengers:14 maxToBoard:98 Park:14 Man:5 
+Time: Mon Dec 23 21:09:52 2019
+ BUS: 25430 moving in station.
+Time: Mon Dec 23 21:09:57 2019
+ BUS: 25430 parked. 28 passengers coming down.
+Time: Mon Dec 23 21:10:11 2019
+ BUS: 25430 leaving station. 21 passengers boarded.
+Time: Mon Dec 23 21:10:16 2019
+ BUS: 25430 left the station.

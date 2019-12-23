@@ -1,28 +1,43 @@
 #include "mystation.h"
 
 int main(int argc, char** argv) {
-    char* configFile;
+    char* configFile = NULL;
+    char* outputFile = NULL;
     int segmentID = 0;
     station *Station, *StationSeg;
     void* segmentStart;
 
     // Check and get command line parameters.
-    if(argc != 3) {
+    if(argc != 5) {
         fprintf(stderr, "Something went wrong with the command line parameters.\n");
         return 1;
     }
 
-    if(strcmp(argv[1], "-l") != 0) {
-        fprintf(stderr, "Unrecognised type of argument %s.\n", argv[1]);
-        return 1;
-    } else {
-        configFile = malloc((strlen(argv[2]) + 1) * sizeof(char));
-        strcpy(configFile, argv[2]);
+    for(int i = 1; i < argc; i++) {
+        if(strcmp(argv[i], "-l") == 0) {
+            i++;
+            configFile = malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(configFile, argv[i]);
+        }
+        else if(strcmp(argv[i], "-o") == 0) {
+            i++;
+            outputFile = malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(outputFile, argv[i]);
+        }
+        else {
+            fprintf(stderr, "Unrecognised type of argument %s.\n", argv[1]);
+            return 1;
+        }
     }
 
     // Check if config file exists.
     if(!checkConfigFileExists(configFile)) {
         fprintf(stderr, "Config file doesn't exist.\n");
+        return 1;
+    }
+
+    // Initialize empty output file.
+    if(initializeOutputFile(outputFile) != 0) {
         return 1;
     }
 
@@ -81,7 +96,7 @@ int main(int argc, char** argv) {
 
     srand(time(0));
     for(int i = 0; i < NUM_OF_BUSES; i++) {
-        int errB = createRandomBus(segmentID);
+        int errB = createRandomBus(segmentID, outputFile);
         if(errB == -1)
             return 1;
     }
@@ -95,6 +110,16 @@ int main(int argc, char** argv) {
         perror("Removal of shared memory segment failed.\n");
 
     free(configFile);
+    free(outputFile);
+    sem_destroy(&Station->mutex);
+    sem_destroy(&Station->request);
+    sem_destroy(&Station->awaitAnswer);
+    sem_destroy(&Station->ASKcome);
+    sem_destroy(&Station->PELcome);
+    sem_destroy(&Station->VORcome);
+    sem_destroy(&Station->waitForIn);
+    sem_destroy(&Station->waitForOut);
+    free(Station);
     return 0;
 }
 
@@ -136,7 +161,7 @@ int createStationManager(int segmentID) {
 }
 
 // Instead of getting the buses from a file, we'll create them randomly.
-int createRandomBus(int segmentID) {
+int createRandomBus(int segmentID, char* outputFile) {
     enum region randomType = (enum region)(rand() % 3);
     int randomPassengers = rand() % RANDOM_PASSENGERS_COME + MIN_PASSENGERS_COME;
     int randomCapacity = rand() % RANDOM_CAPACITY + MIN_CAPACITY;
@@ -169,7 +194,7 @@ int createRandomBus(int segmentID) {
     if(pid == 0) {
         execlp("./bus", "./bus", "-t", randomTypeToStr, "-n", randomParkPeriodToStr, "-c",
                 randomCapacityToStr, "-p", randomParkPeriodToStr, "-m", randomManeuverPeriodToStr,
-                "-s", segmentIDtoStr, (char*)NULL);
+                "-s", segmentIDtoStr, "-o", outputFile, (char*)NULL);
     }
         // Error during fork.
     else if(pid < 0) {

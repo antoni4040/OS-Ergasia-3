@@ -10,8 +10,11 @@ int main(int argc, char** argv) {
     void* segmentStart;
     enum region parkingBay;
     int parkingSpot;
+    char* outputFile = NULL;
+    time_t rawtime;
+    struct tm* timeinfo;
 
-    if(argc != 13) {    // Check if right number of command line arguments are given.
+    if(argc != 15) {    // Check if right number of command line arguments are given.
         fprintf(stderr, "Wrong number of command line arguments given.\n");
         return 1;
     }
@@ -53,14 +56,30 @@ int main(int argc, char** argv) {
             i++;
             segmentID = (int)strtol(argv[i], NULL, 10);
         }
+        else if(strcmp(argv[i], "-o") == 0) {     //Output file.
+            i++;
+            outputFile = malloc((strlen(argv[i]) + 1) * sizeof(char));
+            strcpy(outputFile, argv[i]);
+        }
         else {
             fprintf(stderr, "Unrecognised type of argument %s.\n", argv[i]);
             return 1;
         }
     }
 
-    printf("BUS %d: dest:%d  passengers:%d maxToBoard:%d Park:%d Man:%d \n",
+    FILE* output = fopen(outputFile, "a");
+    if(output == NULL) {
+        fprintf(stderr, "Bus: could not open output file.\n");
+        return 1;
+    }
+
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
+    printf("BUS %d: dest:%d  passengers:%d maxToBoard:%d Park:%d Man:%d\n",
             getpid(), destination, passengerCount, maxToBoard, parkPeriod, manTime);
+    fprintf(output, "Time: %s BUS %d: dest:%d  passengers:%d maxToBoard:%d Park:%d Man:%d \n", asctime(timeinfo),
+            getpid(), destination, passengerCount, maxToBoard, parkPeriod, manTime);
+    fclose(output);
 
     // Attach shared memory segment.
     segmentStart = (void*) shmat(segmentID, NULL, 0);
@@ -107,7 +126,17 @@ int main(int argc, char** argv) {
     }
 
     // Maneuver in the station and reach parking spot.
+    output = fopen(outputFile, "a");
+    if(output == NULL) {
+        fprintf(stderr, "Bus: could not open output file.\n");
+        return 1;
+    }
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
     printf("Bus %d moving in station.\n", getpid());
+    fprintf(output,"Time: %s BUS: %d moving in station.\n", asctime(timeinfo), getpid());
+    fclose(output);
+
     sleep(manTime);
     if(Station->goToBay == ASK) {
         parkingBay = ASK;
@@ -135,10 +164,22 @@ int main(int argc, char** argv) {
     sem_post(&Station->waitForIn);
 
     // Passengers go, passengers come, randomly for the needs of this exercise.
+    output = fopen(outputFile, "a");
+    if(output == NULL) {
+        fprintf(stderr, "Bus: could not open output file.\n");
+        return 1;
+    }
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
     printf("Bus %d parked.\n", getpid());
+    fprintf(output,"Time: %s BUS: %d parked. %d passengers coming down.\n", asctime(timeinfo),
+            getpid(), passengersComingDown);
+    fclose(output);
+
     sleep(parkPeriod);
 
     // Ask to leave station.
+    int passengersLeaving = 0;
     notAllowed = 1;
     while(notAllowed == 1) {
         sem_wait(&Station->waitForOut);
@@ -148,9 +189,8 @@ int main(int argc, char** argv) {
         sem_wait(&Station->awaitAnswer);
         if(Station->allowRequest == ALLOW) {
             //Leave.
-            int passengersLeaving = rand() % (maxToBoard - passengersComingDown);
+            passengersLeaving = rand() % (maxToBoard - passengersComingDown);
             Station->passengersLeft += passengersLeaving;
-            Station->busesLeft += 1;
             Station->totalStayAtStation += (int)parkPeriod;
             sem_post(&Station->mutex);
             notAllowed = 0;
@@ -163,7 +203,18 @@ int main(int argc, char** argv) {
     }
 
     // Maneuver out of station.
+    output = fopen(outputFile, "a");
+    if(output == NULL) {
+        fprintf(stderr, "Bus: could not open output file.\n");
+        return 1;
+    }
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
     printf("Bus %d leaving station.\n", getpid());
+    fprintf(output,"Time: %s BUS: %d leaving station. %d passengers boarded.\n", asctime(timeinfo),
+            getpid(), passengersLeaving);
+    fclose(output);
+
     if(parkingBay == ASK) {
         Station->ASKavailable += 1;
         ASKBay[parkingSpot].busID = 0;
@@ -178,9 +229,20 @@ int main(int argc, char** argv) {
     }
     sleep(manTime);
     Station->movingOut = 0;
+    Station->busesLeft += 1;
     sem_post(&Station->waitForOut);
 
+    output = fopen(outputFile, "a");
+    if(output == NULL) {
+        fprintf(stderr, "Bus: could not open output file.\n");
+        return 1;
+    }
+    time(&rawtime);
+    timeinfo = localtime(&rawtime);
     printf("Bus %d left station.\n", getpid());
+    fprintf(output,"Time: %s BUS: %d left the station.\n", asctime(timeinfo),
+            getpid());
+    fclose(output);
 
     //Last bus tells the station manager to fuck off.
     if(Station->busesLeft == NUM_OF_BUSES + NUM_OF_TTY_BUSES) {
@@ -188,11 +250,12 @@ int main(int argc, char** argv) {
         sem_post(&Station->request);
     }
 
-    // Remove shared memory segment.
-    int err = shmctl(segmentID, IPC_RMID, 0);
+    // Detach shared memory segment.
+    int err = shmdt((void*)segmentStart);
     if(err == -1)
-        perror("Removal of shared memory segment failed in bus.\n");
+        perror("Detachment of shared memory segment failed in bus.\n");
 
+    free(outputFile);
     // Leave station and go West to the land of the Elves or whatever.
     return 0;
 }

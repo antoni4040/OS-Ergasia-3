@@ -24,8 +24,8 @@
 #define DECLINE 1
 #define WAIT_IF_FULL 1
 
-#define NUM_OF_BUSES 20     //Buses to create for this simulation.
-#define NUM_OF_TTY_BUSES 0  //Buses that we want to start manually from a terminal.
+#define NUM_OF_BUSES 8      //Buses to create for this simulation.
+#define NUM_OF_TTY_BUSES 1  //Buses that we want to start manually from a terminal.
 
 #define MIN_PARKING_TIME 10
 #define RANDOM_PARKING_TIME 5
@@ -82,7 +82,7 @@ typedef struct station_{
 
 int     createComptroller(int segmentID);
 int     createStationManager(int segmentID);
-int     createRandomBus(int segmentID);
+int     createRandomBus(int segmentID, char* outputFile);
 void    initializeBays(void* segmentStart);
 
 #endif //OS_PROJECT_3_MYSTATION_H

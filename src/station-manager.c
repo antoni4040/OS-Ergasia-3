@@ -77,10 +77,10 @@ int main(int argc, char** argv) {
 
     printf("Ran out of buses, time for station manager to go home.\n");
 
-    // Remove shared memory segment.
-    int err = shmctl(segmentID, IPC_RMID, 0);
+    // Detach shared memory segment.
+    int err = shmdt((void*)segmentStart);
     if(err == -1)
-        perror("Removal of shared memory segment failed in station manager.\n");
+        perror("Detachment of shared memory segment failed in station manager.\n");
 
     return 0;
 }

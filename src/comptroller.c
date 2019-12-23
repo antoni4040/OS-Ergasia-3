@@ -57,10 +57,10 @@ int main(int argc, char** argv) {
         }
     }
 
-    // Remove shared memory segment.
-    int err = shmctl(segmentID, IPC_RMID, 0);
+    // Detach shared memory segment.
+    int err = shmdt((void*)segmentStart);
     if(err == -1)
-        perror("Removal of shared memory segment failed.\n");
+        perror("Detachment of shared memory segment failed.\n");
 
     return 0;
 }

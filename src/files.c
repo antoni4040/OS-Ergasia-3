@@ -9,6 +9,20 @@ bool checkConfigFileExists(char* filename) {
 }
 
 /*
+Create or empty output file.
+*/
+int initializeOutputFile(char* filename) {
+    FILE* output = fopen(filename, "w");
+    if(output == NULL) {
+        fprintf(stderr, "Problem creating output file.\n");
+        return 1;
+    }
+    fprintf(output, "Output File:\n");
+    fclose(output);
+    return 0;
+}
+
+/*
 Read config file and initialize the station's bay information accordingly.
 */
 int readConfigFile(station* Station, char* configFile) {
@@ -42,6 +56,7 @@ int readConfigFile(station* Station, char* configFile) {
             return 1;
         }
     }
+    free(line);
     fclose(config);
     return 0;
 }

@@ -21,6 +21,8 @@ sys/ipc.h
 -
 sys/shm.h
 -
+time.h
+-
 mystation.h
 ../include/mystation.h
 
